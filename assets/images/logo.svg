@@ -1,9 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 325 50" width="325" height="50">
-  <!-- Ultra-fused, Minimalist Wordmark (THEIMRANS) -->
   <text x="0" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="36" font-weight="700" letter-spacing="-2">
-    <!-- Lighter muted blue for "THE" -->
-    <tspan fill="#719ece">THE</tspan>
-    <!-- Darker muted blue for "IMRANS" -->
-    <tspan fill="#2c5282">IMRANS</tspan>
+    <tspan fill="#719ece">THE</tspan><tspan fill="#2c5282">IMRANS</tspan>
   </text>
 </svg>
