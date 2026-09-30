@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'Nimbus Roman No9 L';
+    src: url('NimbusRomNo9L-MedIta.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nimbus Roman No9 L';
+    src: url('NimbusRomNo9L-Med.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nimbus Roman No9 L';
+    src: url('NimbusRomNo9L-Reg.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nimbus Roman No9 L';
+    src: url('NimbusRomNo9L-RegIta.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
