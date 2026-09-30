@@ -8,7 +8,7 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-// --- Admin password (CHANGE THIS) ---
+// --- Admin password ---
 $ADMIN_PASSWORD = getenv('ADMIN_PASSWORD');
 if (empty($ADMIN_PASSWORD)) {
     die('ADMIN_PASSWORD environment variable is not set.');
@@ -51,7 +51,8 @@ $MAIL_DOMAIN = getenv('MAIL_DOMAIN') ?: 'theimrans.tech';
 // --- Discover mailserver container ---
 $DOCKER = '/usr/bin/docker';
 
-$output = shell_exec("$DOCKER ps --filter 'name=mailserver' --format '{{.Names}}' 2>/dev/null | head -1");
+// Change 'name=mailserver' to 'name=docker-mailserver'
+$output = shell_exec("$DOCKER ps --filter 'name=docker-mailserver' --format '{{.Names}}' 2>/dev/null | head -1");
 $containerName = $output !== null ? trim($output) : '';
 if (empty($containerName)) {
     die("⚠️ Mailserver container not found. Is it running?");
