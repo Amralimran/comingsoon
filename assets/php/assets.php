@@ -1,11 +1,11 @@
 <?php
-// /assets/php/assets.php
+// https://theimrans.tech/assets/php/assets.php
 //
 // Central asset registry. Apps call portal_assets([...]) with the group
 // names they need. One version constant invalidates every asset.
 //
 // Usage:
-//   include_once $rootDoc . '/assets/php/assets.php';
+//   include_once $rootDoc . 'https://theimrans.tech/assets/php/assets.php';
 //   portal_assets(['app', 'rtf']);
 //
 // Groups are declared in $GLOBALS['PORTAL_ASSET_GROUPS']. Each group
@@ -17,35 +17,35 @@ if (!defined('PORTAL_ASSET_VERSION')) {
 }
 
 if (!isset($GLOBALS['PORTAL_ASSET_GROUPS'])) {
-    // Each entry: ['type' => 'css'|'js', 'path' => '/assets/...']
+    // Each entry: ['type' => 'css'|'js', 'path' => 'https://theimrans.tech/assets/...']
     // Order within a group matters. Order of groups passed to portal_assets() matters.
     $GLOBALS['PORTAL_ASSET_GROUPS'] = [
 
         // ---- Base portal styling and semantics ----
         'css-base' => [
-            ['type' => 'css', 'path' => '/assets/css/portal.css'],
+            ['type' => 'css', 'path' => 'https://theimrans.tech/assets/css/portal.css'],
         ],
 
         // ---- Tabulator (grid library) — CSS + JS ----
         'tables' => [
-            ['type' => 'css', 'path' => '/assets/css/tabulator.min.css'],
-            ['type' => 'js',  'path' => '/assets/js/tabulator.min.js'],
+            ['type' => 'css', 'path' => 'https://theimrans.tech/assets/css/tabulator.min.css'],
+            ['type' => 'js',  'path' => 'https://theimrans.tech/assets/js/tabulator.min.js'],
         ],
 
         // ---- Tabulator without JS (for pages that only need the styling) ----
         'tables-css' => [
-            ['type' => 'css', 'path' => '/assets/css/tabulator.min.css'],
+            ['type' => 'css', 'path' => 'https://theimrans.tech/assets/css/tabulator.min.css'],
         ],
 
         // ---- Dialog component (showModalDialog) ----
         'dialog' => [
-            ['type' => 'js', 'path' => '/assets/js/dialog.js'],
+            ['type' => 'js', 'path' => 'https://theimrans.tech/assets/js/dialog.js'],
         ],
 
         // ---- RTF / plain editor ----
         'rtf' => [
-            ['type' => 'css', 'path' => '/assets/css/rtf_modal.css'],
-            ['type' => 'js',  'path' => '/assets/js/rtf_editor.js'],
+            ['type' => 'css', 'path' => 'https://theimrans.tech/assets/css/rtf_modal.css'],
+            ['type' => 'js',  'path' => 'https://theimrans.tech/assets/js/rtf_editor.js'],
         ],
 
         // ---- Convenience bundle: most apps need this set ----
