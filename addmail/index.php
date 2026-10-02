@@ -20,7 +20,10 @@ if (empty($_SESSION['authenticated'])) {
         $_SESSION['authenticated'] = true;
     } else {
         ?>
-        <!DOCTYPE html><html><head><title>Login</title>
+        <!DOCTYPE html><html><head>
+        <link href="assets/css/tabulator.min.css" rel="stylesheet">
+        <script src="assets/js/tabulator.min.js"></script>
+        <title>Login</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <style>
             body{font-family:"Segoe UI", Arial, Helvetica, sans-serif;max-width:400px;margin:80px auto;padding:20px;background:#f9f9f9;}
@@ -188,62 +191,89 @@ if ($rawList) {
     </div>
 
     <div class="card">
-        <h3>Existing Accounts (<?= count($accounts); ?>)</h3>
-        <?php if (empty($accounts)): ?>
-            <p>No accounts found.</p>
-        <?php else: ?>
-            <table>
-                <tr><th>Email</th><th>Change Password</th><th></th></tr>
-                <?php foreach ($accounts as $acc): ?>
-                <tr>
-                    <td><?= htmlspecialchars($acc); ?></td>
-                    <td>
-                        <form method="POST" class="inline-form">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="email" value="<?= htmlspecialchars($acc); ?>">
-                            <input type="password" name="password" placeholder="New password" required minlength="8">
-                            <button type="submit">Update</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="POST" onsubmit="return confirm('Delete <?= htmlspecialchars($acc); ?>? This cannot be undone.');">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="email" value="<?= htmlspecialchars($acc); ?>">
-                            <button type="submit" class="danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php endif; ?>
+        <h3>Existing Accounts (<span id="account-count"><?= count($accounts); ?></span>)</h3>
+        <div style="margin: 10px 0;">
+            <input type="text" id="account-search" placeholder="🔍 Search accounts..." 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        <div id="accounts-table"></div>
     </div>
 <script>
-    const MAIL_DOMAIN = <?= json_encode($MAIL_DOMAIN) ?>;
+document.addEventListener('DOMContentLoaded', function () {
+    // Account data injected from PHP
+    const accounts = <?= json_encode(array_map(fn($e) => ['email' => $e], $accounts)) ?>;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const emailInput = document.querySelector('input[name="email"]');
-        if (!emailInput) return;
-
-        function normalizeEmail(value) {
-            value = value.trim();
-            if (!value) return '';
-            if (value.includes('@')) {
-                return value.split('@')[0] + '@' + MAIL_DOMAIN;
+    const table = new Tabulator("#accounts-table", {
+        data: accounts,
+        layout: "fitColumns",
+        pagination: "local",
+        paginationSize: 10,
+        paginationSizeSelector: [5, 10, 20, 50, true],
+        placeholder: "No accounts found.",
+        columns: [
+            {
+                title: "Email",
+                field: "email",
+                sorter: "string",
+                headerFilter: "input",
+                widthGrow: 2
+            },
+            {
+                title: "Change Password",
+                field: "email",
+                headerSort: false,
+                formatter: function (cell) {
+                    const email = cell.getValue();
+                    return `<form method="POST" class="inline-form" style="margin:0;">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="email" value="${escapeHtml(email)}">
+                        <input type="password" name="password" placeholder="New password" required minlength="8"
+                               style="width:130px; padding:6px; font-size:0.9em; border:1px solid #ccc; border-radius:4px;">
+                        <button type="submit" style="padding:6px 10px; font-size:0.9em;">Update</button>
+                    </form>`;
+                },
+                widthGrow: 2
+            },
+            {
+                title: "",
+                field: "email",
+                headerSort: false,
+                formatter: function (cell) {
+                    const email = cell.getValue();
+                    return `<form method="POST" style="margin:0;"
+                              onsubmit="return confirm('Delete ${escapeHtml(email).replace(/'/g, "\\'")}? This cannot be undone.');">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="email" value="${escapeHtml(email)}">
+                        <button type="submit" class="danger" 
+                                style="padding:6px 10px; font-size:0.9em;">Delete</button>
+                    </form>`;
+                },
+                width: 90,
+                hozAlign: "center"
             }
-            return value + '@' + MAIL_DOMAIN;
-        }
-
-        emailInput.addEventListener('blur', function () {
-            const normalized = normalizeEmail(this.value);
-            if (normalized) this.value = normalized;
-        });
-
-        emailInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                this.value = normalizeEmail(this.value);
-            }
-        });
+        ]
     });
+
+    // Wire up the search box to Tabulator's filter
+    document.getElementById("account-search").addEventListener("input", function (e) {
+        const term = e.target.value.trim();
+        if (term) {
+            table.setFilter("email", "like", term);
+        } else {
+            table.clearFilter();
+        }
+    });
+
+    // Simple HTML escape for inline form values
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+});
 </script>
 </body>
 </html>
