@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// --- Portal asset registry ---
+include_once 'https://theimrans.tech/assets/php/assets.php';
+
 // --- Logout ---
 if (isset($_GET['logout'])) {
     session_destroy();
@@ -131,8 +134,7 @@ if ($rawList) {
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://theimrans.tech/assets/css/tabulator.min.css" rel="stylesheet">
-    <script src="https://theimrans.tech/assets/js/tabulator.min.js"></script>
+    <?php portal_assets(['app']); ?>
     <title>Mailserver Account Manager</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
