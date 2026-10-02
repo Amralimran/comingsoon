@@ -159,7 +159,7 @@ if ($rawList) {
         .topbar a { color: #a8a8a8; text-decoration: none; font-size: 0.9em; }
         .topbar a:hover { color: #dc3545; }
         .inline-form { display: flex; gap: 6px; align-items: center; }
-        .inline-form input[type="password"] { width: 140px; }
+        .inline-form input[type="password"] { width: 200px; }
         .header-row {
             display: flex;
             justify-content: space-between;
@@ -203,6 +203,12 @@ if ($rawList) {
         }
         .container > div:last-child {
             margin-bottom: 0;
+        }
+        /* Compact action buttons in the Tabulator grid */
+        .tabulator .tabulator-cell button {
+            font-weight: normal;
+            font-size: 0.8em;
+            padding: 5px 10px;
         }
 
     </style>
