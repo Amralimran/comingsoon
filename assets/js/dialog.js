@@ -36,16 +36,16 @@ function showModalDialog(title, contentHtml, buttons = [], onAction = null, alig
 
     let modalHtml = `
     <div id="globalPortalModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 9999;">
-        <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 10px; border-radius: 16px; width: ${widthVal}; height: ${heightVal}; max-width: 95%; max-height: 90vh; color: #222; box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-family: "segoe UI", Arial, sans-serif; display: flex; flex-direction: column; align-items: stretch; overflow-y: auto;">
+        <div style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 16px; width: ${widthVal}; height: ${heightVal}; max-width: 95%; max-height: 90vh; color: #222; box-shadow: 0 10px 30px rgba(0,0,0,0.15); font-family: "segoe UI", Arial, sans-serif; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;">
             
-            <!-- TOP CONTAINER: Title & Content Body -->
-            <div style="width: 100%; text-align: center;">
+            <!-- TOP CONTAINER: Title & Scrollable Content Body -->
+            <div style="flex-grow: 1; overflow-y: auto; width: 100%; text-align: center; padding-right: 5px;">
                 ${title ? `<h3 style="margin-top: 0; color: #111; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-align: center;">${title}</h3>` : ''}
                 <div style="font-size: 14px; color: #444; line-height: 1.5; margin-bottom: 20px; text-align: center;">${contentHtml}</div>
             </div>
 
-            <!-- BOTTOM CONTAINER: Button Bar -->
-            <div style="width: 100%; display: flex; justify-content: ${justifyContent}; gap: 10px; align-items: center; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 15px; margin-top: auto;">
+            <!-- BOTTOM CONTAINER: Pinned Button Bar -->
+            <div style="flex-shrink: 0; width: 100%; display: flex; justify-content: ${justifyContent}; gap: 10px; align-items: center; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 15px; margin-top: 10px;">
                 ${buttonsHtml}
             </div>
 
