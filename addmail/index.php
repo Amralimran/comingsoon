@@ -200,11 +200,6 @@ if ($rawList) {
     </style>
 </head>
 <body>
-
-    
-    <?php if ($message): ?><div class="msg"><?= htmlspecialchars($message); ?></div><?php endif; ?>
-    <?php if ($error): ?><div class="err"><?= htmlspecialchars($error); ?></div><?php endif; ?>
-
     <div class="card">
         <div class="header-row">
             <h3>Mailserver Account Manager</h3>
@@ -228,6 +223,9 @@ if ($rawList) {
         <h3>Existing Accounts (<span id="account-count"><?= count($accounts); ?></span>)</h3>
         <div id="accounts-table"></div>
     </div>
+
+    <?php if ($message): ?><div class="msg" id="flash-msg"><?= htmlspecialchars($message); ?></div><?php endif; ?>
+    <?php if ($error): ?><div class="err" id="flash-err"><?= htmlspecialchars($error); ?></div><?php endif; ?>
 
 <script>
     const MAIL_DOMAIN = <?= json_encode($MAIL_DOMAIN) ?>;
@@ -341,6 +339,29 @@ document.addEventListener('DOMContentLoaded', function () {
             iconElement.textContent = "👁️";
         }
     }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Auto-dismiss success banner after 3 seconds
+    const msg = document.getElementById('flash-msg');
+    if (msg) {
+        setTimeout(() => {
+            msg.style.transition = 'opacity 0.5s ease';
+            msg.style.opacity = '0';
+            setTimeout(() => msg.remove(), 500);
+        }, 3000);
+    }
+
+    // Errors stay visible, but optionally also fade after a longer delay
+    const err = document.getElementById('flash-err');
+    if (err) {
+        setTimeout(() => {
+            err.style.transition = 'opacity 0.5s ease';
+            err.style.opacity = '0';
+            setTimeout(() => err.remove(), 500);
+        }, 6000); // 6 seconds for errors
+    }
+});
 </script>
 </body>
 </html>
