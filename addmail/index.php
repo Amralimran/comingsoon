@@ -2,7 +2,7 @@
 session_start();
 
 // --- Portal asset registry ---
-include_once 'https://theimrans.tech/assets/php/assets.php';
+include_once ($_SERVER['DOCUMENT_ROOT'] ?? '/var/www/html') . '/assets/php/assets.php';
 
 // --- Logout ---
 if (isset($_GET['logout'])) {
