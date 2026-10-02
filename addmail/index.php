@@ -198,12 +198,18 @@ if ($rawList) {
         .logout-link:hover {
             color: #dc3545;
         }
+        .container > div {
+            margin-bottom: 30px;
+        }
+        .container > div:last-child {
+            margin-bottom: 0;
+        }
 
     </style>
 </head>
 <body>
     <div class="container">
-    <div class="card">
+    <div>
         <div class="header-row">
             <h3>Mailserver Account Manager</h3>
             <a href="?logout=1" class="logout-link">Logout</a>
@@ -222,7 +228,7 @@ if ($rawList) {
         </form>
     </div>
 
-    <div class="card">
+    <div>
         <h3>Existing Accounts (<span id="account-count"><?= count($accounts); ?></span>)</h3>
         <div id="accounts-table"></div>
     </div>
