@@ -164,7 +164,29 @@ if ($rawList) {
             align-items: center;
             margin-bottom: 12px;
         }
-
+        .password-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+        .password-wrapper input[type="password"],
+        .password-wrapper input[type="text"] {
+            width: 100%;
+            padding-right: 35px; /* Leave room for the eye icon so text doesn't hide behind it */
+        }
+        .eye-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #888;
+            user-select: none;
+        }
+        .eye-toggle:hover {
+            color: #333;
+        }
         .logout-link {
             color: #a8a8a8;
             text-decoration: none;
@@ -194,7 +216,10 @@ if ($rawList) {
             <label>Email Address</label>
             <input type="email" name="email" required placeholder="user@<?= htmlspecialchars($MAIL_DOMAIN) ?>">
             <label>Password</label>
-            <input type="password" name="password" required placeholder="Enter password" minlength="8">
+            <div class="password-wrapper">
+                <input type="password" name="password" id="password" required placeholder="Enter password" minlength="8">
+                <span class="eye-toggle" onclick="togglePassword('password', this)">👁️</span>
+            </div>
             <button type="submit" style="margin-top:14px;">Create New Email</button>
         </form>
     </div>
@@ -259,11 +284,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 headerSort: false,
                 formatter: function (cell) {
                     const email = cell.getValue();
+                    const uniqueId = 'pass_' + Math.random().toString(36).substring(2, 7); // Generate unique ID for each row
                     return `<form method="POST" class="inline-form" style="margin:0;">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="email" value="${escapeHtml(email)}">
-                        <input type="password" name="password" placeholder="New password" required minlength="8"
-                               style="width:130px; padding:6px; font-size:0.9em; border:1px solid #ccc; border-radius:4px;">
+                        <div class="password-wrapper" style="position:relative; display:inline-block;">
+                            <input type="password" name="password" id="${uniqueId}" placeholder="New password" required minlength="8"
+                                style="width:130px; padding:6px; padding-right:30px; font-size:0.9em; border:1px solid #ccc; border-radius:4px;">
+                            <span class="eye-toggle" onclick="togglePassword('${uniqueId}', this)" 
+                                style="position:absolute; right:8px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:0.85em; user-select:none;">👁️</span>
+                        </div>
                         <button type="submit" style="padding:6px 10px; font-size:0.9em;">Update</button>
                     </form>`;
                 },
@@ -299,6 +329,18 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/'/g, "&#039;");
     }
 });
+    function togglePassword(fieldId, iconElement) {
+        const inputField = document.getElementById(fieldId);
+        if (!inputField) return;
+
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            iconElement.textContent = "👁️‍🗨️"; // Optional: change icon to show it's open/active
+        } else {
+            inputField.type = "password";
+            iconElement.textContent = "👁️";
+        }
+    }
 </script>
 </body>
 </html>
