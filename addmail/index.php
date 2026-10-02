@@ -192,10 +192,6 @@ if ($rawList) {
 
     <div class="card">
         <h3>Existing Accounts (<span id="account-count"><?= count($accounts); ?></span>)</h3>
-        <div style="margin: 10px 0;">
-            <input type="text" id="account-search" placeholder="🔍 Search accounts..." 
-                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
         <div id="accounts-table"></div>
     </div>
 <script>
@@ -252,16 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 hozAlign: "center"
             }
         ]
-    });
-
-    // Wire up the search box to Tabulator's filter
-    document.getElementById("account-search").addEventListener("input", function (e) {
-        const term = e.target.value.trim();
-        if (term) {
-            table.setFilter("email", "like", term);
-        } else {
-            table.clearFilter();
-        }
     });
 
     // Simple HTML escape for inline form values
