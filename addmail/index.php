@@ -139,7 +139,7 @@ if ($rawList) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #222; }
+        body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #222; }
         .card { background: #fff; padding: 22px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
         h2 { margin-top: 0; color: #777777; }
         h3 { margin-top: 0; color: #777777; }
