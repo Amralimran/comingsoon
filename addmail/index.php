@@ -159,7 +159,7 @@ if ($rawList) {
         .topbar a { color: #a8a8a8; text-decoration: none; font-size: 0.9em; }
         .topbar a:hover { color: #dc3545; }
         .inline-form { display: flex; gap: 6px; align-items: center; }
-        .inline-form input[type="password"] { width: 200px; }
+        .inline-form input[type="password"] { width: 140px; }
         .header-row {
             display: flex;
             justify-content: space-between;
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <input type="hidden" name="email" value="${escapeHtml(email)}">
                         <div class="password-wrapper" style="position:relative; display:inline-block;">
                             <input type="password" name="password" id="${uniqueId}" placeholder="New password" required minlength="8"
-                                style="width:130px; padding:6px; padding-right:30px; font-size:0.9em; border:1px solid #ccc; border-radius:4px;">
+                                style="width:200px; padding:6px; padding-right:30px; font-size:0.9em; border:1px solid #ccc; border-radius:4px;">
                             <span class="eye-toggle" onclick="togglePassword('${uniqueId}', this)" 
                                 style="position:absolute; right:8px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:0.85em; user-select:none;">👁️</span>
                         </div>
