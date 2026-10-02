@@ -203,6 +203,33 @@ if ($rawList) {
         <h3>Existing Accounts (<span id="account-count"><?= count($accounts); ?></span>)</h3>
         <div id="accounts-table"></div>
     </div>
+
+<script>
+    const MAIL_DOMAIN = <?= json_encode($MAIL_DOMAIN) ?>;
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.querySelector('input[name="email"]');
+        if (!emailInput) return;
+
+        function normalizeEmail(value) {
+            value = value.trim();
+            if (!value) return '';
+            const localPart = value.split('@')[0];
+            if (!localPart) return '';
+
+            return localPart + '@' + MAIL_DOMAIN;
+        }
+
+        emailInput.addEventListener('blur', function () {
+            const normalized = normalizeEmail(this.value);
+            if (normalized) this.value = normalized;
+        });
+        emailInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                this.value = normalizeEmail(this.value);
+            }
+        });
+    });
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Account data injected from PHP
