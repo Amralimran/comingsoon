@@ -139,7 +139,7 @@ if ($rawList) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #222; }
+        body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; max-width: 750px; margin: 40px auto; padding: 20px; background: #f9f9f9; color: #222; }
         .card { background: #fff; padding: 22px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
         h2 { margin-top: 0; color: #777777; }
         h3 { margin-top: 0; color: #777777; }
@@ -310,18 +310,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: "",
                 field: "email",
                 headerSort: false,
+                headerFilter: false,
                 formatter: function (cell) {
                     const email = cell.getValue();
-                    return `<form method="POST" style="margin:0;"
-                              onsubmit="return confirm('Delete ${escapeHtml(email).replace(/'/g, "\\'")}? This cannot be undone.');">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="email" value="${escapeHtml(email)}">
-                        <button type="submit" class="danger" 
-                                style="padding:6px 10px; font-size:0.9em;">Delete</button>
-                    </form>`;
+                    return `<button type="button" class="btn-danger" 
+                                    style="padding:6px 10px; font-size:0.9em;">Delete</button>`;
                 },
                 width: 90,
-                hozAlign: "center"
+                hozAlign: "center",
+                cellClick: function (e, cell) {
+                    const email = cell.getValue();
+                    showModalDialog(
+                        'Confirm Deletion',
+                        `Are you sure you want to delete <strong>${escapeHtml(email)}</strong>?<br><br>This cannot be undone.`,
+                        [
+                            { text: 'Cancel', type: 'warning', action: 'cancel' },
+                            { text: 'Delete', type: 'danger', action: 'delete' }
+                        ],
+                        function (action) {
+                            if (action === 'delete') {
+                                const form = document.createElement('form');
+                                form.method = 'POST';
+                                form.style.display = 'none';
+                                ['action', 'email'].forEach(name => {
+                                    const input = document.createElement('input');
+                                    input.name = name;
+                                    input.value = name === 'action' ? 'delete' : email;
+                                    form.appendChild(input);
+                                });
+                                document.body.appendChild(form);
+                                form.submit();
+                            }
+                        }
+                    );
+                }
             }
         ]
     });
