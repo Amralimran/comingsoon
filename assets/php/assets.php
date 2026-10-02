@@ -13,7 +13,7 @@
 // requested, and duplicates are emitted only once.
 
 if (!defined('PORTAL_ASSET_VERSION')) {
-    define('PORTAL_ASSET_VERSION', '0.012');
+    define('PORTAL_ASSET_VERSION', '0.001');
 }
 
 if (!isset($GLOBALS['PORTAL_ASSET_GROUPS'])) {
