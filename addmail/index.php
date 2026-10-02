@@ -122,8 +122,8 @@ if ($rawList) {
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="assets/css/tabulator.min.css" rel="stylesheet">
-    <script src="assets/js/tabulator.min.js"></script>
+    <link href="https://assets/css/tabulator.min.css" rel="stylesheet">
+    <script src="https://assets/js/tabulator.min.js"></script>
     <title>Mailserver Account Manager</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
