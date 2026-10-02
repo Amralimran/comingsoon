@@ -68,11 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     if ($action === 'add' || $action === 'update') {
     $email = trim($_POST['email'] ?? '');
 
-    // Normalize: force the mail domain
+    // Normalize: force every input to use the mail domain
     if (!empty($email)) {
         if (str_contains($email, '@')) {
-            $email = explode('@', $email)[0] . '@' . $MAIL_DOMAIN;
+            // Split into local part (before the first '@') and discard the rest
+            $localPart = trim(explode('@', $email, 2)[0]);
+            
+            if ($localPart !== '') {
+                $email = $localPart . '@' . $MAIL_DOMAIN;
+            } else {
+                // Input was just "@something" (empty local part) -> cleared
+                $email = '';
+            }
         } else {
+            // Input had no '@' -> append mail domain
             $email = $email . '@' . $MAIL_DOMAIN;
         }
     }
@@ -200,13 +209,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const accounts = <?= json_encode(array_map(fn($e) => ['email' => $e], $accounts)) ?>;
 
     const table = new Tabulator("#accounts-table", {
-        data: accounts,
-        layout: "fitColumns",
-        pagination: "local",
-        paginationSize: 10,
-        paginationSizeSelector: [5, 10, 20, 50, true],
-        placeholder: "No accounts found.",
-        columns: [
+    data: accounts,
+    layout: "fitColumns",
+    initialSort: [
+        { column: "email", dir: "asc" }
+    ],
+    pagination: "local",
+    paginationSize: 10,
+    paginationSizeSelector: [5, 10, 20, 50, true],
+    placeholder: "No accounts found.",
+    columns: [
             {
                 title: "Email",
                 field: "email",
