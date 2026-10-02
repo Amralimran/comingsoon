@@ -202,6 +202,7 @@ if ($rawList) {
     </style>
 </head>
 <body>
+    <div class="container">
     <div class="card">
         <div class="header-row">
             <h3>Mailserver Account Manager</h3>
@@ -365,5 +366,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+</div>
 </body>
 </html>
