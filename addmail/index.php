@@ -207,8 +207,8 @@ if ($rawList) {
         /* Compact action buttons in the Tabulator grid */
         .tabulator .tabulator-cell button {
             font-weight: normal;
-            font-size: 0.8em;
-            padding: 5px 10px;
+            font-size: 0.7em;
+            padding: 3px 6px;
         }
 
     </style>
