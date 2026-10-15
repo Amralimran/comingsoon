@@ -1,5 +1,6 @@
 <?php
 file_put_contents('/tmp/macrodroid-request.log', date('c') . ' URI: ' . ($_SERVER['REQUEST_URI'] ?? 'unknown') . PHP_EOL, FILE_APPEND);
+
 // deepseek-bridge.php
 // Receives text from MacroDroid, relays to DeepSeek, returns plain text response.
 
