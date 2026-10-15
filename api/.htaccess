@@ -1,0 +1,7 @@
+# /api/.htaccess
+# Deny direct browser access to all files in this directory.
+# MacroDroid (or any server-side script) can still call them programmatically.
+
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
