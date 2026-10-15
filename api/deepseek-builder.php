@@ -1,36 +1,49 @@
 <?php
 // deepseek-builder.php
-// Acts as an OpenAI-compatible endpoint for MacroDroid's AI Macro Builder.
+// OpenAI-compatible endpoint for MacroDroid AI Macro Builder.
 
 // --- Load API Key ---
 $apiKey = getenv('DEEPSEEK_API_KEY');
 if (empty($apiKey)) {
     http_response_code(500);
+    header('Content-Type: application/json');
     echo json_encode(['error' => ['message' => 'DEEPSEEK_API_KEY not set']]);
     exit;
 }
 
-// --- Read the JSON body from MacroDroid ---
+// --- Read JSON body (not form data) ---
 $input = file_get_contents('php://input');
 $request = json_decode($input, true);
 
-// --- Extract the user's prompt (the last message) ---
-$userMessage = '';
-if (isset($request['messages']) && is_array($request['messages'])) {
-    // Get the last message, which should be the user's description
-    $lastMessage = end($request['messages']);
-    $userMessage = $lastMessage['content'] ?? '';
-}
-
-if (empty($userMessage)) {
+if (json_last_error() !== JSON_ERROR_NONE || !$request) {
     http_response_code(400);
-    echo json_encode(['error' => ['message' => 'No prompt found in request']]);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => ['message' => 'Invalid JSON body']]);
     exit;
 }
 
-// --- Prepare the request to DeepSeek ---
-$deepSeekPayload = json_encode([
-    'model' => 'deepseek-chat', // Use the fast, standard model
+// --- Extract the user's prompt ---
+$userMessage = '';
+if (isset($request['messages']) && is_array($request['messages'])) {
+    // Get the last user message (the description)
+    foreach (array_reverse($request['messages']) as $msg) {
+        if (($msg['role'] ?? '') === 'user') {
+            $userMessage = $msg['content'] ?? '';
+            break;
+        }
+    }
+}
+
+if (empty(trim($userMessage))) {
+    http_response_code(400);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => ['message' => 'No user message found']]);
+    exit;
+}
+
+// --- Send to DeepSeek ---
+$payload = json_encode([
+    'model' => 'deepseek-chat',
     'messages' => [
         ['role' => 'user', 'content' => $userMessage]
     ],
@@ -42,13 +55,13 @@ $ch = curl_init('https://api.deepseek.com/chat/completions');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => $deepSeekPayload,
+    CURLOPT_POSTFIELDS => $payload,
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
         'Authorization: Bearer ' . $apiKey
     ],
     CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_TIMEOUT => 60 // AI generation can take a bit longer
+    CURLOPT_TIMEOUT => 60
 ]);
 
 $response = curl_exec($ch);
@@ -56,18 +69,20 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $curlError = curl_error($ch);
 curl_close($ch);
 
-// --- Handle Errors ---
+// --- Handle errors ---
 if ($response === false || $httpCode !== 200) {
     http_response_code(502);
-    echo json_encode(['error' => ['message' => 'DeepSeek API error: ' . ($curlError ?: 'HTTP ' . $httpCode)]]);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => ['message' => 'DeepSeek error: ' . ($curlError ?: 'HTTP ' . $httpCode)]]);
     exit;
 }
 
-$deepSeekData = json_decode($response, true);
-$replyContent = $deepSeekData['choices'][0]['message']['content'] ?? '';
+$data = json_decode($response, true);
+$reply = $data['choices'][0]['message']['content'] ?? '';
 
-// --- Repackage the response in OpenAI format for MacroDroid ---
-$openAiStyleResponse = [
+// --- Return OpenAI-compatible JSON ---
+header('Content-Type: application/json');
+echo json_encode([
     'id' => 'chatcmpl-' . uniqid(),
     'object' => 'chat.completion',
     'created' => time(),
@@ -77,7 +92,7 @@ $openAiStyleResponse = [
             'index' => 0,
             'message' => [
                 'role' => 'assistant',
-                'content' => $replyContent
+                'content' => $reply
             ],
             'finish_reason' => 'stop'
         ]
@@ -87,7 +102,4 @@ $openAiStyleResponse = [
         'completion_tokens' => 0,
         'total_tokens' => 0
     ]
-];
-
-header('Content-Type: application/json');
-echo json_encode($openAiStyleResponse);
+]);
